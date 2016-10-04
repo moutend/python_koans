@@ -33,10 +33,35 @@ from runner.koan import *
 #
 # Your goal is to write the score method.
 
-def score(dice):
-    # You need to write this method
-    pass
+def set_of_three(dice):
+    if len(dice) < 3:
+        return 0, dice
+    for i in range(len(dice) - 2):
+        has_set_of_three = dice[i] == dice[i + 1] and dice[i + 1] == dice[i + 2]
+        except_set_of_three = dice[0:i] + dice[i + 3:]
+        if has_set_of_three and dice[i] == 1:
+            return 1000, except_set_of_three
+        if has_set_of_three:
+            return 100 * dice[i], except_set_of_three
+    return 0, dice
 
+def get_pt(x):
+    if x == 1:
+        return 100
+    elif x == 5:
+        return 50
+    else:
+        return 0
+
+def score(dice):
+    if len(dice) < 1:
+        return 0
+    bonus_pt, s = set_of_three(sorted(dice))
+    if len(s) == 0:
+        pt = 0
+    else:
+         pt = reduce(lambda ac, x: ac + x, map(get_pt, s))
+    return bonus_pt + pt
 
 class AboutScoringProject(Koan):
     def test_score_of_an_empty_list_is_zero(self):
